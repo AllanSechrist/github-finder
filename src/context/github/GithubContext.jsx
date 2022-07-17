@@ -29,13 +29,13 @@ export const GithubProvider = ({ children }) => {
       },
     });
     const { items } = await response.json();
-    console.log(items);
     dispatch({
       type: "GET_USERS",
       payload: items,
     });
   };
 
+  // clear user search results
   const clearResults = () => dispatch({ type: "CLEAR" });
 
   // set loading
