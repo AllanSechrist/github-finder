@@ -4,17 +4,17 @@ import GithubContext from "../../context/github/GithubContext";
 function UserSearch() {
   const [text, setText] = useState("");
 
-  const { users } = useContext(GithubContext);
+  const { users, searchUsers } = useContext(GithubContext);
 
   const handleChange = (e) => setText(e.target.value);
 
   const handleSubmit = (e) => {
-    e.preventDefualt();
+    e.preventDefault();
 
     if (text === "") {
       alert("please enter something");
     } else {
-      // @todo - serach users
+      searchUsers(text);
 
       setText("");
     }
@@ -31,7 +31,7 @@ function UserSearch() {
                 className="w-full pr-40 bg-gray-200 input input-lg text-black"
                 placeholder="Search"
                 value={text}
-                onchange={handleChange}
+                onChange={handleChange}
               />
               <button
                 type="submit"

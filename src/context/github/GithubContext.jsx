@@ -4,7 +4,7 @@ import GITHUB_AUTH from "./Secrets";
 
 const GithubContext = createContext();
 
-const GITHUB_URL = "https://api.github.com/users";
+const GITHUB_URL = "https://api.github.com";
 const GITHUB_TOKEN = GITHUB_AUTH;
 
 export const GithubProvider = ({ children }) => {
@@ -15,17 +15,24 @@ export const GithubProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(githubReducer, initialState);
 
-  const fetchUsers = async () => {
-    setLoading()
-    const response = await fetch(`${GITHUB_URL}`, {
+  // search users
+  const searchUsers = async (text) => {
+    setLoading();
+
+    const params = new URLSearchParams({
+      q: text,
+    });
+
+    const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`,
       },
     });
-    const data = await response.json();
+    const { items } = await response.json();
+    console.log(items);
     dispatch({
       type: "GET_USERS",
-      payload: data,
+      payload: items,
     });
   };
 
@@ -37,7 +44,7 @@ export const GithubProvider = ({ children }) => {
       value={{
         users: state.users,
         loading: state.loading,
-        fetchUsers,
+        searchUsers,
       }}
     >
       {children}
